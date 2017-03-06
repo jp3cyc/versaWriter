@@ -2,9 +2,18 @@
 バーサライター
 microSDを用いることで，様々なパターンを保存することができます．
 
+- verseWriter-cache.lib ライブラリファイル
+- verseWriter.bak バックアップファイル
+- verseWriter.kicad_pcb 基板データ
+- verseWriter.pdf 回路図データpdf版
+- verseWriter.pro KiCadプロジェクトファイル
+- verseWriter.sch 回路図データ
+
 # KiCadについて
 KiCad 4.0.0を使用しています．
 ライブラリは標準ライブラリのみを使用しています．
+
+
 
 # LEDについて
 LEDの数は24個使っています．
