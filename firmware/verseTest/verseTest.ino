@@ -1,17 +1,19 @@
-int pinLED0 = 0;
-int pinLED1 = 1;
-int pinLED2 = 2;
-int pinLED3 = 3;
-int pinLED4 = 4;
-int pinLED5 = 5;
-int pinLED6 = 6;
-int pinLED7 = 7;
+int pinLED0 = 2;
+int pinLED1 = 3;
+int pinLED2 = 4;
+int pinLED3 = 5;
+int pinLED4 = 6;
+int pinLED5 = 7;
+int pinLED6 = 8;
+int pinLED7 = 9;
 
 int pinDynamic0 = 14;
 int pinDynamic1 = 15;
 int pinDynamic2 = 16;
 
 int pinHole = 19;
+
+int time = 100;
 
 void setup()
 {
@@ -35,6 +37,7 @@ void loop(){
   digitalWrite(pinDynamic0,HIGH);
   for(int i=0;i<=7;i++){
     digitalWrite(pinLED0+i,HIGH);
+    delay(time);
   }
   for(int i=0;i<=7;i++){
     digitalWrite(pinLED0+i,LOW);
@@ -44,6 +47,7 @@ void loop(){
   digitalWrite(pinDynamic1,HIGH);
   for(int i=0;i<=7;i++){
     digitalWrite(pinLED0+i,HIGH);
+    delay(time);
   }
   for(int i=0;i<=7;i++){
     digitalWrite(pinLED0+i,LOW);
@@ -53,6 +57,7 @@ void loop(){
   digitalWrite(pinDynamic2,HIGH);
   for(int i=0;i<=7;i++){
     digitalWrite(pinLED0+i,HIGH);
+    delay(time);
   }
   for(int i=0;i<=7;i++){
     digitalWrite(pinLED0+i,LOW);
