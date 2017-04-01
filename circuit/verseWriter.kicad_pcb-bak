@@ -3,7 +3,7 @@
   (general
     (links 81)
     (no_connects 0)
-    (area 173.599999 14.724999 213.714286 142.700001)
+    (area 173.599999 14.724999 236.632143 147.700001)
     (thickness 1.6)
     (drawings 22)
     (tracks 1419)
@@ -87,9 +87,9 @@
       (subtractmaskfromsilk false)
       (outputformat 1)
       (mirror false)
-      (drillshape 1)
+      (drillshape 0)
       (scaleselection 1)
-      (outputdirectory ""))
+      (outputdirectory Garb/))
   )
 
   (net 0 "")
