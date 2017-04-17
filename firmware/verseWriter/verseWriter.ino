@@ -1,3 +1,5 @@
+#include <MsTimer2.h>
+
 int pinLED0 = 8;
 int pinLED1 = 9;
 int pinLED2 = 2;
@@ -15,7 +17,21 @@ int pinHole = 19;
 int pinIr = 18;
 
 int time = 100;
+int counter = 20;
+int posi;
 
+unsigned int pattern[20] = {};
+
+
+void PinInterrupt(){
+  time = counter /20;
+  posi=0;
+  counter = 0;
+}
+
+void timerInterrupt(){
+  counter ++;
+}
 
 
 void setup()
@@ -35,7 +51,12 @@ void setup()
   
   pinMode(pinHole, INPUT);
   pinMode(pinIr, INPUT);
+
+  MsTimer2::set(10, timerInterrupt); // 10msごとにオンオフ
+  MsTimer2::start();
+  attachInterrupt(digitalPinToInterrupt(pinHole), PinInterrupt, CHANGE);
 }
+
 void ledWrite(unsigned int signal){
   PORTB = PORTB & 0xfc | (signal & 0x0c00) >> 4;
   PORTC = PORTC & 0xf0 | (signal & 0x000f);
@@ -60,8 +81,10 @@ void ledWrite2(unsigned int signal){
 void loop(){
   
   for(int i=0;i<12;i++){
-    ledWrite(0x01 << i);
-    delay(5);
+    ledWrite(pattern[posi]);
+    posi ++;
+    delay(time);
   }
    
 }
+
