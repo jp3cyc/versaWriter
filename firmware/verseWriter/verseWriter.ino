@@ -1,4 +1,5 @@
-#include <MsTimer2.h>
+//#include <MsTimer2.h>
+#include < TimerOne.h>
 
 int pinLED0 = 8;
 int pinLED1 = 9;
@@ -69,8 +70,9 @@ void setup()
   pinMode(pinHole, INPUT);
   pinMode(pinIr, INPUT);
 
-  MsTimer2::set(1, timerInterrupt); // 1msごと
-  MsTimer2::start();
+ // MsTimer2::set(1, timerInterrupt); // 1msごと
+ // MsTimer2::start();
+ 
   //attachInterrupt(pinHoleint, PinInterrupt, CHANGE);
 }
 
@@ -122,12 +124,14 @@ void loop(){
   if(posi >=40) {
     posi =  0;
   }
+  delay(1);
+  /*
   cnt = 0;
   while(1){
     checkPinInterrupt();
     if( cnt >= time ){
       break;
-    }
+    }/
     //checkPinInterrupt();
   }
 
@@ -147,7 +151,3 @@ void loop(){
 
 
 }
-
-
-
-
