@@ -18,7 +18,7 @@ int pinHoleint = 13;
 //int flagHole = 1;
 int pinIr = 19;
 
-volatile unsigned long time = 10;
+volatile unsigned long time = 1;
 volatile unsigned long timer = 0;
 volatile unsigned int posi=0;
 volatile unsigned long cnt=0;
@@ -27,46 +27,26 @@ int count = 0;
 int flag=1;
 
 unsigned int pattern[] = {
-0b000011000000,
-0b000011000000,
-0b000011100000,
-0b000011100000,
-0b000001110000,
-0b000000111000,
-0b000000011110,
-0b000000000100,
-0b000000000000,
-0b000000000000,
-0b000000000000,
-0b000000000000,
-0b000000000100,
-0b000000011110,
-0b000000111100,
-0b000001110000,
-0b000011100000,
-0b000011100000,
-0b000011000000,
-0b000011000000,
-0b000011000000,
-0b000011000000,
-0b000011100000,
-0b000011100000,
-0b000011110000,
-0b000011111000,
-0b000111011111,
-0b000111000110,
-0b000111000000,
-0b000111000000,
-0b000111000000,
-0b000111000000,
-0b000111000000,
-0b000111000000,
-0b000011000000,
-0b000011000000,
-0b000011000000,
-0b000011000000,
-0b000011000000,
-0b000011000000,
+0b111111000000,
+0b111111110000,
+0b111000011100,
+0b110000000010,
+0b110000000000,
+0b110000000000,
+0b110000000010,
+0b111000011100,
+0b111101110000,
+0b111111100000,
+0b111111100000,
+0b111001110000,
+0b110000011100,
+0b110000001110,
+0b100000011100,
+0b100000011100,
+0b110000001100,
+0b110000011100,
+0b111000111000,
+0b111111100000,
 };
 
 
@@ -89,7 +69,7 @@ void setup()
   pinMode(pinHole, INPUT);
   pinMode(pinIr, INPUT);
 
-  MsTimer2::set(1, timerInterrupt); // 10msごとにオンオフ
+  MsTimer2::set(1, timerInterrupt); // 1msごと
   MsTimer2::start();
   //attachInterrupt(pinHoleint, PinInterrupt, CHANGE);
 }
@@ -102,65 +82,72 @@ void ledWrite(unsigned int signal){
 
 }
 void checkPinInterrupt(){
-  if((digitalRead(pinHole) == 1 ) && ( flag == 1) ){  //立ち上がりのときに１度だけ実行
+  if(( (PINC & 0x10) == 0x10 ) && ( flag == 1) ){  //立ち上がりのときに１度だけ実行
     PinInterrupt();
     flag = 0;
 
 
   }
-  if( (digitalRead(pinHole) != 1) && (flag == 0) ){
+  if( ((PINC & 0x10) != 0x10) && (flag == 0) ){
     flag = 1;
   }
 
 }
 
 void PinInterrupt(){
-   posi=0;
+  //位置の初期化
+  posi=0;
+
+  /*  // 点灯時間計算
    count ++;
-  if(count >= 5 ){      // 回転数は平均をとる
-    time = timer /200;    // 1週は40コマだから
-    timer = 0;
-    count = 0;
-  }
+   if(count >= 5 ){      // 回転数は平均をとる
+   time = timer /200;    // 1週は40コマだから
+   timer = 0;
+   count = 0;
+   }*/
 }
 
 void timerInterrupt(){
-  timer ++;
+ // timer ++;
   cnt ++;
 }
 
 
 void loop(){
   //checkPinInterrupt();
-   
-   checkPinInterrupt();
-   ledWrite(pattern[posi]);
-   posi ++;
-   if(posi >=40) {
-   posi =  0;
-   }
-   
+
+  checkPinInterrupt();
+  ledWrite(pattern[posi]);
+  posi ++;
+  if(posi >=40) {
+    posi =  0;
+  }
+  cnt = 0;
   while(1){
+    checkPinInterrupt();
     if( cnt >= time ){
-      cnt = 0;
       break;
     }
-    checkPinInterrupt();
+    //checkPinInterrupt();
   }
-      
 
-//  ledWrite(0x001);
+
+  //  ledWrite(0x001);
   /*
    for(int a = 0;a<12;a++){
    ledWrite(0x800 >> a);
    delay(100);
    }*/
+  /*
+   if( digitalRead(pinHole) == 1 ) digitalWrite(pinLED0,HIGH);
+   else digitalWrite(pinLED0,LOW);
+   */
 
-  
 
 
 
 }
+
 
 
 
