@@ -1,5 +1,5 @@
 //#include <MsTimer2.h>
-#include < TimerOne.h>
+#include <TimerOne.h>
 
 int pinLED0 = 8;
 int pinLED1 = 9;
@@ -28,26 +28,26 @@ int count = 0;
 int flag=1;
 
 unsigned int pattern[] = {
-0b111111000000,
-0b111111110000,
-0b111000011100,
-0b110000000010,
-0b110000000000,
-0b110000000000,
-0b110000000010,
-0b111000011100,
-0b111101110000,
-0b111111100000,
-0b111111100000,
-0b111001110000,
-0b110000011100,
-0b110000001110,
-0b100000011100,
-0b100000011100,
-0b110000001100,
-0b110000011100,
-0b111000111000,
-0b111111100000,
+0b000000011000,
+0b000000011100,
+0b000000011100,
+0b000000011100,
+0b000000001100,
+0b000000001100,
+0b000000011100,
+0b000000011100,
+0b000000011100,
+0b000000011000,
+0b000000011000,
+0b000000011100,
+0b000000011100,
+0b000000011100,
+0b000000001100,
+0b000000001100,
+0b000000011100,
+0b000000011100,
+0b000000011100,
+0b000000011000,
 };
 
 
@@ -70,9 +70,11 @@ void setup()
   pinMode(pinHole, INPUT);
   pinMode(pinIr, INPUT);
 
- // MsTimer2::set(1, timerInterrupt); // 1msごと
- // MsTimer2::start();
- 
+  //MsTimer2::set(1, timerInterrupt); // 1msごと
+  //MsTimer2::start();
+  Timer1.initialize(100); // micro second
+  Timer1.attachInterrupt(timerInterrupt);
+  Timer1.start();
   //attachInterrupt(pinHoleint, PinInterrupt, CHANGE);
 }
 
@@ -100,17 +102,17 @@ void PinInterrupt(){
   //位置の初期化
   posi=0;
 
-  /*  // 点灯時間計算
+    // 点灯時間計算
    count ++;
    if(count >= 5 ){      // 回転数は平均をとる
-   time = timer /200;    // 1週は40コマだから
+   time = timer /100;    // 1週は40コマだから
    timer = 0;
    count = 0;
-   }*/
+   }
 }
 
 void timerInterrupt(){
- // timer ++;
+  timer ++;
   cnt ++;
 }
 
@@ -121,17 +123,17 @@ void loop(){
   checkPinInterrupt();
   ledWrite(pattern[posi]);
   posi ++;
-  if(posi >=40) {
+  if(posi >=20) {
     posi =  0;
   }
-  delay(1);
-  /*
+ // delayMicroseconds(1000);
+  
   cnt = 0;
   while(1){
     checkPinInterrupt();
     if( cnt >= time ){
       break;
-    }/
+    }
     //checkPinInterrupt();
   }
 
