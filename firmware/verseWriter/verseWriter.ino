@@ -28,26 +28,48 @@ int count = 0;
 int flag=1;
 
 unsigned int pattern[] = {
-0b000000011000,
-0b000000011100,
-0b000000011100,
-0b000000011100,
-0b000000001100,
-0b000000001100,
-0b000000011100,
-0b000000011100,
-0b000000011100,
-0b000000011000,
-0b000000011000,
-0b000000011100,
-0b000000011100,
-0b000000011100,
-0b000000001100,
-0b000000001100,
-0b000000011100,
-0b000000011100,
-0b000000011100,
-0b000000011000,
+0b000011000000,
+0b000011000000,
+0b000011100000,
+0b000011100000,
+0b000001110000,
+0b000000111000,
+0b000000011110,
+0b000000000100,
+0b000000000000,
+0b000000000000,
+0b000000000000,
+0b000000000000,
+0b000000000100,
+0b000000011110,
+0b000000111100,
+0b000001110000,
+0b000011100000,
+0b000011100000,
+0b000011000000,
+0b000011000000,
+0b000011000000,
+0b000011000000,
+0b000011100000,
+0b000011100000,
+0b000011110000,
+0b000011111000,
+0b000111011111,
+0b000111000110,
+0b000111000000,
+0b000111000000,
+0b000111000000,
+0b000111000000,
+0b000111000000,
+0b000111000000,
+0b000011000000,
+0b000011000000,
+0b000011000000,
+0b000011000000,
+0b000011000000,
+0b000011000000,
+
+
 };
 
 
@@ -72,7 +94,7 @@ void setup()
 
   //MsTimer2::set(1, timerInterrupt); // 1msごと
   //MsTimer2::start();
-  Timer1.initialize(100); // micro second
+  Timer1.initialize(20); // micro second
   Timer1.attachInterrupt(timerInterrupt);
   Timer1.start();
   //attachInterrupt(pinHoleint, PinInterrupt, CHANGE);
@@ -104,8 +126,8 @@ void PinInterrupt(){
 
     // 点灯時間計算
    count ++;
-   if(count >= 5 ){      // 回転数は平均をとる
-   time = timer /100;    // 1週は40コマだから
+   if(count >= 10 ){      // 回転数は平均をとる
+   time = timer / 400;    // 1週は40コマだから
    timer = 0;
    count = 0;
    }
@@ -123,15 +145,16 @@ void loop(){
   checkPinInterrupt();
   ledWrite(pattern[posi]);
   posi ++;
-  if(posi >=20) {
+  if(posi >=40) {
     posi =  0;
   }
  // delayMicroseconds(1000);
   
-  cnt = 0;
+
   while(1){
     checkPinInterrupt();
     if( cnt >= time ){
+      cnt = 0;
       break;
     }
     //checkPinInterrupt();
@@ -145,10 +168,10 @@ void loop(){
    delay(100);
    }*/
   /*
-   if( digitalRead(pinHole) == 1 ) digitalWrite(pinLED0,HIGH);
-   else digitalWrite(pinLED0,LOW);
-   */
-
+   if( digitalRead(pinHole) == 1 ) digitalWrite(pinLED1,HIGH);
+   else digitalWrite(pinLED1,LOW);
+   
+*/
 
 
 
