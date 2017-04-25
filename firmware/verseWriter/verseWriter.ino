@@ -15,8 +15,6 @@ int pinLED10 = 16;
 int pinLED11 = 17;
 
 int pinHole = 18;
-int pinHoleint = 13;
-//int flagHole = 1;
 int pinIr = 19;
 
 volatile unsigned long time = 1;
@@ -27,7 +25,7 @@ int count = 0;
 
 int flag=1;
 
-unsigned int pattern[] = {
+unsigned int pattern[] = {  // 点灯パターン
 0b000011000000,
 0b000011000000,
 0b000011100000,
@@ -92,15 +90,16 @@ void setup()
   pinMode(pinHole, INPUT);
   pinMode(pinIr, INPUT);
 
-  //MsTimer2::set(1, timerInterrupt); // 1msごと
-  //MsTimer2::start();
+  //タイマ割り込みの設定
   Timer1.initialize(20); // micro second
   Timer1.attachInterrupt(timerInterrupt);
   Timer1.start();
-  //attachInterrupt(pinHoleint, PinInterrupt, CHANGE);
+
 }
 
 void ledWrite(unsigned int signal){
+  
+  //ポートに出力している．digitalWriteを高速化する書き方をしている
   // 0x800 is center.LED1 is outside.
   PORTB = PORTB & 0xfc | (signal & 0x003);
   PORTD = PORTD & 03 | (signal & 0x0fc) ; 
@@ -108,6 +107,7 @@ void ledWrite(unsigned int signal){
 
 }
 void checkPinInterrupt(){
+  //ホールセンサの立ち上がりを研修tしている．
   if(( (PINC & 0x10) == 0x10 ) && ( flag == 1) ){  //立ち上がりのときに１度だけ実行
     PinInterrupt();
     flag = 0;
@@ -121,19 +121,22 @@ void checkPinInterrupt(){
 }
 
 void PinInterrupt(){
+  //立ち上がりのときに実行される
+  
   //位置の初期化
   posi=0;
 
     // 点灯時間計算
    count ++;
-   if(count >= 10 ){      // 回転数は平均をとる
-   time = timer / 400;    // 1週は40コマだから
+   if(count >= 10 ){      // 回転数は10回の平均をとる
+   time = timer / 400;    // 1周は40コマだから400
    timer = 0;
    count = 0;
    }
 }
 
 void timerInterrupt(){
+  //20マイクロ秒ごとに実行される．
   timer ++;
   cnt ++;
 }
@@ -142,37 +145,20 @@ void timerInterrupt(){
 void loop(){
   //checkPinInterrupt();
 
-  checkPinInterrupt();
-  ledWrite(pattern[posi]);
-  posi ++;
-  if(posi >=40) {
+  checkPinInterrupt();      //ホール素子をチェック
+  ledWrite(pattern[posi]);  //LEDを点灯させる
+  posi ++;                  
+  if(posi >=40) {            //1周したときのしょり
     posi =  0;
   }
- // delayMicroseconds(1000);
-  
 
-  while(1){
+
+  while(1){                  //待つ．待っているときにもホール素子をチェックする．
     checkPinInterrupt();
     if( cnt >= time ){
       cnt = 0;
       break;
     }
-    //checkPinInterrupt();
   }
-
-
-  //  ledWrite(0x001);
-  /*
-   for(int a = 0;a<12;a++){
-   ledWrite(0x800 >> a);
-   delay(100);
-   }*/
-  /*
-   if( digitalRead(pinHole) == 1 ) digitalWrite(pinLED1,HIGH);
-   else digitalWrite(pinLED1,LOW);
-   
-*/
-
-
 
 }
